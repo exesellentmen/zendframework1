@@ -530,7 +530,9 @@ abstract class Zend_Application_Bootstrap_BootstrapAbstract
     {
         $resource  = strtolower($name);
         $container = $this->getContainer();
-        return isset($container->{$resource});
+        $arrayContainer = $container->getArrayCopy();
+        $resourceResult = $arrayContainer[$resource];
+        return isset($resourceResult);
     }
 
     /**
