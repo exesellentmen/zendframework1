@@ -109,7 +109,7 @@ abstract class Zend_View_Helper_Placeholder_Container_Standalone extends Zend_Vi
      *
      * return bool
      */
-    public function getAutoEscape()
+    public function getAutoEscape(): bool
     {
         return $this->_autoEscape;
     }
@@ -120,7 +120,7 @@ abstract class Zend_View_Helper_Placeholder_Container_Standalone extends Zend_Vi
      * @param  string $string
      * @return string
      */
-    protected function _escape($string)
+    protected function _escape($string): string
     {
         $enc = 'UTF-8';
         if ($this->view instanceof Zend_View_Interface
@@ -241,7 +241,7 @@ abstract class Zend_View_Helper_Placeholder_Container_Standalone extends Zend_Vi
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return $this->getContainer()->toString();
     }
@@ -261,7 +261,7 @@ abstract class Zend_View_Helper_Placeholder_Container_Standalone extends Zend_Vi
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         $container = $this->getContainer();
         return count($container);
@@ -273,7 +273,7 @@ abstract class Zend_View_Helper_Placeholder_Container_Standalone extends Zend_Vi
      * @param  string|int $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->getContainer()->offsetExists($offset);
     }
@@ -284,7 +284,7 @@ abstract class Zend_View_Helper_Placeholder_Container_Standalone extends Zend_Vi
      * @param  string|int $offset
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->getContainer()->offsetGet($offset);
     }
@@ -296,9 +296,9 @@ abstract class Zend_View_Helper_Placeholder_Container_Standalone extends Zend_Vi
      * @param  mixed $value
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value) : void
     {
-        return $this->getContainer()->offsetSet($offset, $value);
+        $this->getContainer()->offsetSet($offset, $value);
     }
 
     /**
@@ -307,9 +307,9 @@ abstract class Zend_View_Helper_Placeholder_Container_Standalone extends Zend_Vi
      * @param  string|int $offset
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
-        return $this->getContainer()->offsetUnset($offset);
+        $this->getContainer()->offsetUnset($offset);
     }
 
     /**
@@ -317,7 +317,7 @@ abstract class Zend_View_Helper_Placeholder_Container_Standalone extends Zend_Vi
      *
      * @return Iterator
      */
-    public function getIterator()
+    public function getIterator(): Iterator
     {
         return $this->getContainer()->getIterator();
     }
