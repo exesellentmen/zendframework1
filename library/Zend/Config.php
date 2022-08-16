@@ -33,28 +33,28 @@ class Zend_Config implements Countable, Iterator
      *
      * @var boolean
      */
-    protected $_allowModifications;
+    protected bool $_allowModifications;
 
     /**
      * Iteration index
      *
      * @var integer
      */
-    protected $_index;
+    protected int $_index;
 
     /**
      * Number of elements in configuration data
      *
      * @var integer
      */
-    protected $_count;
+    protected ?int $_count;
 
     /**
      * Contains array of configuration data
      *
      * @var array
      */
-    protected $_data;
+    protected array $_data;
 
     /**
      * Used when unsetting values during iteration to ensure we do not skip
@@ -62,7 +62,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @var boolean
      */
-    protected $_skipNextIteration;
+    protected bool $_skipNextIteration;
 
     /**
      * Contains which config file sections were loaded. This is null
@@ -71,7 +71,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @var mixed
      */
-    protected $_loadedSection;
+    protected mixed $_loadedSection;
 
     /**
      * This is used to track section inheritance. The keys are names of sections that
@@ -79,7 +79,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @var array
      */
-    protected $_extends = array();
+    protected array $_extends = array();
 
     /**
      * Load file error string.
@@ -88,7 +88,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @var string
      */
-    protected $_loadFileErrorStr = null;
+    protected ?string $_loadFileErrorStr = null;
 
     /**
      * Zend_Config provides a property based interface to
@@ -122,10 +122,10 @@ class Zend_Config implements Countable, Iterator
      * Retrieve a value and return $default if there is no element set.
      *
      * @param string $name
-     * @param mixed $default
+     * @param mixed|null $default
      * @return mixed
      */
-    public function get($name, $default = null)
+    public function get(string $name, mixed $default = null): mixed
     {
         $result = $default;
         if (array_key_exists($name, $this->_data)) {
@@ -140,7 +140,7 @@ class Zend_Config implements Countable, Iterator
      * @param string $name
      * @return mixed
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         return $this->get($name);
     }
@@ -154,7 +154,7 @@ class Zend_Config implements Countable, Iterator
      * @throws Zend_Config_Exception
      * @return void
      */
-    public function __set($name, $value)
+    public function __set(string $name, mixed $value)
     {
         if ($this->_allowModifications) {
             if (is_array($value)) {
@@ -178,15 +178,15 @@ class Zend_Config implements Countable, Iterator
      */
     public function __clone()
     {
-      $array = array();
-      foreach ($this->_data as $key => $value) {
-          if ($value instanceof Zend_Config) {
-              $array[$key] = clone $value;
-          } else {
-              $array[$key] = $value;
-          }
-      }
-      $this->_data = $array;
+        $array = array();
+        foreach ($this->_data as $key => $value) {
+            if ($value instanceof Zend_Config) {
+                $array[$key] = clone $value;
+            } else {
+                $array[$key] = $value;
+            }
+        }
+        $this->_data = $array;
     }
 
     /**
@@ -194,7 +194,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $array = array();
         $data = $this->_data;
@@ -214,7 +214,7 @@ class Zend_Config implements Countable, Iterator
      * @param string $name
      * @return boolean
      */
-    public function __isset($name)
+    public function __isset(string $name)
     {
         return isset($this->_data[$name]);
     }
@@ -226,7 +226,7 @@ class Zend_Config implements Countable, Iterator
      * @throws Zend_Config_Exception
      * @return void
      */
-    public function __unset($name)
+    public function __unset(string $name)
     {
         if ($this->_allowModifications) {
             unset($this->_data[$name]);
@@ -245,7 +245,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->_count;
     }
@@ -255,7 +255,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @return mixed
      */
-    public function current()
+    public function current(): mixed
     {
         $this->_skipNextIteration = false;
         return current($this->_data);
@@ -266,7 +266,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @return mixed
      */
-    public function key()
+    public function key(): mixed
     {
         return key($this->_data);
     }
@@ -275,7 +275,7 @@ class Zend_Config implements Countable, Iterator
      * Defined by Iterator interface
      *
      */
-    public function next()
+    public function next(): void
     {
         if ($this->_skipNextIteration) {
             $this->_skipNextIteration = false;
@@ -289,7 +289,7 @@ class Zend_Config implements Countable, Iterator
      * Defined by Iterator interface
      *
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->_skipNextIteration = false;
         reset($this->_data);
@@ -301,7 +301,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @return boolean
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->_index < $this->_count;
     }
@@ -311,7 +311,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @return mixed
      */
-    public function getSectionName()
+    public function getSectionName(): mixed
     {
         if(is_array($this->_loadedSection) && count($this->_loadedSection) == 1) {
             $this->_loadedSection = $this->_loadedSection[0];
@@ -324,7 +324,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @return boolean
      */
-    public function areAllSectionsLoaded()
+    public function areAllSectionsLoaded(): bool
     {
         return $this->_loadedSection === null;
     }
@@ -338,7 +338,7 @@ class Zend_Config implements Countable, Iterator
      * @param Zend_Config $merge
      * @return Zend_Config
      */
-    public function merge(Zend_Config $merge)
+    public function merge(Zend_Config $merge): static
     {
         foreach($merge as $key => $item) {
             if(array_key_exists($key, $this->_data)) {
@@ -365,7 +365,7 @@ class Zend_Config implements Countable, Iterator
      * into one object which should then not be modified again.
      *
      */
-    public function setReadOnly()
+    public function setReadOnly(): void
     {
         $this->_allowModifications = false;
         foreach ($this->_data as $key => $value) {
@@ -380,7 +380,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @return boolean
      */
-    public function readOnly()
+    public function readOnly(): bool
     {
         return !$this->_allowModifications;
     }
@@ -390,7 +390,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @return array
      */
-    public function getExtends()
+    public function getExtends(): array
     {
         return $this->_extends;
     }
@@ -398,11 +398,11 @@ class Zend_Config implements Countable, Iterator
     /**
      * Set an extend for Zend_Config_Writer
      *
-     * @param  string $extendingSection
-     * @param  string $extendedSection
+     * @param string $extendingSection
+     * @param string|null $extendedSection
      * @return void
      */
-    public function setExtend($extendingSection, $extendedSection = null)
+    public function setExtend(string $extendingSection, string $extendedSection = null): void
     {
         if ($extendedSection === null && isset($this->_extends[$extendingSection])) {
             unset($this->_extends[$extendingSection]);
@@ -420,7 +420,7 @@ class Zend_Config implements Countable, Iterator
      * @throws Zend_Config_Exception
      * @return void
      */
-    protected function _assertValidExtend($extendingSection, $extendedSection)
+    protected function _assertValidExtend(string $extendingSection, string $extendedSection): void
     {
         // detect circular section inheritance
         $extendedSectionCurrent = $extendedSection;
@@ -444,7 +444,7 @@ class Zend_Config implements Countable, Iterator
      * @param string $errfile
      * @param integer $errline
      */
-    public function _loadFileErrorHandler($errno, $errstr, $errfile, $errline)
+    public function _loadFileErrorHandler($errno, $errstr, $errfile, $errline): void
     {
         if ($this->_loadFileErrorStr === null) {
             $this->_loadFileErrorStr = $errstr;
