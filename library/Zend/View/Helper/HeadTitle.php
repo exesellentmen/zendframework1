@@ -187,7 +187,7 @@ class Zend_View_Helper_HeadTitle extends Zend_View_Helper_Placeholder_Container_
      * @param  string|null $locale
      * @return string
      */
-    public function toString($indent = null, $locale = null)
+    public function toString($indent = null, $locale = null): string
     {
         $indent = (null !== $indent)
                 ? $this->getWhitespace($indent)
